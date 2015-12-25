@@ -13,6 +13,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MyExplosionFiled explosionField = new MyExplosionFiled(this);
+
+        explosionField.addListener(findViewById(R.id.iv));
     }
 
 

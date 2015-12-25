@@ -9,6 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ public class MyExplosionFiled extends View {
 
     private static final Canvas mCanvas = new Canvas(); //画布
     private ArrayList<MyExplosionAnimator> explosionAnimators;//记录每个view的动画
+    private OnClickListener mOnClickListener;
 
 
     public MyExplosionFiled(Context context) {
@@ -36,7 +39,7 @@ public class MyExplosionFiled extends View {
      */
     private void init() {
         explosionAnimators =new ArrayList<MyExplosionAnimator>();
-
+            attach2Activity((Activity) getContext());
     }
 
     public void explode(final  View v){
@@ -65,12 +68,50 @@ public class MyExplosionFiled extends View {
 
     /**
      *  给Activity 加上全覆盖的ExplosionFiled
-     * @param canvas
+     * @param activity
      */
         private void attach2Activity(Activity activity){
 
+            //把整个activity 的view 加进去
+           ViewGroup rootView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+//            ViewGroup p = (ViewGroup) rootView.getParent();
+//            if (p != null) {
+//                p.removeAllViews();
+//            }
+            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT
+            );
+            rootView.addView(rootView, lp);
         }
 
+
+        public void addListener(View v){
+            if(v instanceof  ViewGroup){
+                ViewGroup viewGroup =(ViewGroup)v;
+                int count = viewGroup.getChildCount();
+                for(int i=0; i<count;i++){
+                    addListener(viewGroup.getChildAt(i));
+                }
+            } else {
+                v.setClickable(true);
+                v.setOnClickListener(getOnClickListener());
+            }
+        }
+
+    public OnClickListener getOnClickListener() {
+
+            if(null == mOnClickListener){
+                mOnClickListener = new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        MyExplosionFiled.this.explode(v);
+
+                        v.setOnClickListener(null);// 点击一次后就不需要了
+                    }
+                };
+            }
+        return mOnClickListener;
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -117,6 +158,4 @@ public class MyExplosionFiled extends View {
             return null;
         }
     }
-
-
 }
