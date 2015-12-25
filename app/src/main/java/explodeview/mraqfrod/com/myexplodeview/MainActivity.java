@@ -1,8 +1,7 @@
 package explodeview.mraqfrod.com.myexplodeview;
 
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  *  自己学习用的第一个项目
@@ -16,8 +15,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
+
 }
