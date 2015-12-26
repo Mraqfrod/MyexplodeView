@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -45,7 +46,7 @@ public class MyExplosionFiled extends View {
     public void explode(final  View v){
         Rect rect = new Rect();
         v.getGlobalVisibleRect(rect);//得到view相对整个屏幕的坐标
-        rect.offset(0,-Utils.dp2px(25));//减掉状态栏的高
+        rect.offset(0,-Utils.dp2px(75));//减掉状态栏的高
         final MyExplosionAnimator animator =new MyExplosionAnimator(this,createBitmapFromView(v),rect);
         explosionAnimators.add(animator);
             //把 原view 跟爆炸关联起来
@@ -54,11 +55,12 @@ public class MyExplosionFiled extends View {
             public void onAnimationStart(Animator animator) {
                 v.animate().alpha(0f).setDuration(150).start();
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
-                v.animate().alpha(1f).setDuration(150).start();
+               v.animate().alpha(1f).setDuration(150).start();
                 explosionAnimators.remove(animation);
-                animation =null;
+                animation = null;
             }
         });
 
@@ -74,14 +76,16 @@ public class MyExplosionFiled extends View {
 
             //把整个activity 的view 加进去
            ViewGroup rootView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+            Log.i("aaa"," root = "+rootView.getParent());
 //            ViewGroup p = (ViewGroup) rootView.getParent();
 //            if (p != null) {
 //                p.removeAllViews();
 //            }
+            Log.i("aaa"," root = "+rootView.getParent());
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT
             );
-            rootView.addView(rootView, lp);
+            rootView.addView(this, lp);
         }
 
 
@@ -106,7 +110,7 @@ public class MyExplosionFiled extends View {
                     public void onClick(View v) {
                         MyExplosionFiled.this.explode(v);
 
-                        v.setOnClickListener(null);// 点击一次后就不需要了
+                     //   v.setOnClickListener(null);// 点击一次后就不需要了
                     }
                 };
             }

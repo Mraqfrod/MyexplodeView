@@ -2,6 +2,7 @@ package explodeview.mraqfrod.com.myexplodeview;
 
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -9,7 +10,7 @@ import java.util.Random;
  *  爆炸的 粒子 类
  */
 public class MyParticle {
-    public static final int PART_WH = 8 ;//默认粒子的宽高为8
+    public static final int PART_WH = 16 ;//默认粒子的宽高为16
     float cx; // 粒子x轴坐标
     float cy;// 粒子y轴坐标
     float radius;//粒子 半径
@@ -26,15 +27,15 @@ public class MyParticle {
      * @return
      */
     public static MyParticle getParticle(int color, Rect bound , Point point){
-        int row = point.x;
-        int column =point.y;
+        int row = point.y;
+        int column =point.x;
 
         MyParticle particle =new MyParticle();
         particle.mBound = bound;
         particle.color=color;
         particle.alpha =1f;
 
-        particle.radius = PART_WH/2;
+        particle.radius = PART_WH;
         // bount .left 是原view 距离屏幕的距离 加上 粒子的宽  就是粒子的坐标了
         particle.cx = bound.left +PART_WH * column;//
         particle.cy =bound.top + PART_WH * row;
@@ -42,18 +43,18 @@ public class MyParticle {
     }
 
     /**
-     *   粒子爆炸的方法
+     *   粒子爆炸的方法 可以根据需求 修改粒子运动的轨迹
      * @param factor 透明度 0-1 不断增大
      */
  public void explosion(float  factor){
      //随机改变 cx 大小 让 粒子 左右飘
-     cx = cx +factor * random.nextInt(mBound.width())*(random.nextFloat() - 0.5f);
+    cx = cx + factor * random.nextInt(mBound.width())*(random.nextFloat() - 0.5f);
      // cx 不断增大 让 粒子下落
-     cy = cy +factor * random .nextInt(mBound.height()/2);
+     cy = cy + factor * random .nextInt(mBound.height()/2);
     // 半径越来越小
-     radius =radius - factor * random.nextInt(2);
+     radius = radius - factor * random.nextInt(2);
      // 越来越透明
-     alpha = (1f - factor)* (1+random.nextFloat());
+     alpha = (1f - factor) * ( 1 + random.nextFloat());
  }
 
 
